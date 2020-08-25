@@ -116,8 +116,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 	case WM_CREATE:
 		MapInit();
-		//SetTimer(hWnd, 1, 100, NULL);
-		//MonPath.push_back(Map[0][0].center);
 		MonSter.center.x = Map[0][0].center.x;
 		MonSter.center.y = Map[0][0].center.y;
 		// 콘솔 출력
@@ -187,11 +185,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_TIMER:
 	{
-		time += 8;
-		if (MonPath[64 / time].y == MonSter.center.y)
-			MonSter.center.x += 8;
-		else if (MonPath[64 / time].x == MonSter.center.x)
-			MonSter.center.y += 8;
+		if (MonPath[time / 64 + 1].y == MonSter.center.y)
+		{
+			if (MonPath[time / 64 + 1].x > MonSter.center.x)
+				MonSter.center.x += 16;
+			else MonSter.center.x -= 16;
+		}
+		else if (MonPath[time / 64 + 1].x == MonSter.center.x)
+		{
+			if (MonPath[time / 64 + 1].y > MonSter.center.y)
+				MonSter.center.y += 16;
+			else MonSter.center.y -= 16;
+		}
+		time += 16;
 		InvalidateRgn(hWnd, NULL, TRUE);
 	}
 	break;
@@ -382,8 +388,6 @@ void AStarPathMaking(const POINT & endPoint)
 	while (cur_Node->state != Node_start)
 	{
 		MonPath.push_back(cur_Node->center);
-		//cout << cur_Node->center.x << ' ';
-		//cout << cur_Node->center.y << endl;
 		cur_Node->state = Node_path;
 		cur_Node = cur_Node->closest_Node;
 
