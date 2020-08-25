@@ -1,8 +1,3 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
-
 #pragma once
 
 #include "targetver.h"
@@ -17,5 +12,12 @@
 #include <memory.h>
 #include <tchar.h>
 
+#include <queue>
+#include <functional>
 
-// TODO: reference additional headers your program requires here
+inline bool operator==(const POINT & p1, const POINT & p2)
+{
+	if (p1.x == p2.x && p1.y == p2.y)
+		return true;
+	return false;
+}
